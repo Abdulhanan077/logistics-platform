@@ -232,7 +232,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                                         const toastId = toast.loading('Uploading images...');
 
                                                         try {
-                                                            const newUrls = [];
+                                                            const newUrls: string[] = [];
                                                             for (const file of files) {
                                                                 const response = await fetch(
                                                                     `/api/upload?filename=${encodeURIComponent(file.name)}`,
