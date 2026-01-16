@@ -2,12 +2,7 @@ import prisma from "@/lib/prisma"
 
 import Link from "next/link"
 import { MapPin, Package, Clock, ArrowLeft, Building2 } from "lucide-react"
-import dynamic from 'next/dynamic';
-
-const TrackingMap = dynamic(() => import('@/components/TrackingMap'), {
-    loading: () => <div className="h-[400px] w-full bg-slate-800 animate-pulse rounded-xl" />,
-    ssr: false
-});
+import TrackingMapWrapper from '@/components/TrackingMapWrapper';
 
 async function getShipment(trackingNumber: string) {
     return await prisma.shipment.findUnique({
@@ -139,7 +134,7 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                                     <MapPin className="w-5 h-5 mr-3 text-slate-500" />
                                     Live Location
                                 </h3>
-                                <TrackingMap
+                                <TrackingMapWrapper
                                     lat={latestLocation.latitude}
                                     lng={latestLocation.longitude}
                                     locationName={latestLocation.location}
