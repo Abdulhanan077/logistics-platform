@@ -9,6 +9,7 @@ export default function CreateShipmentModal({ onClose }: { onClose: () => void }
         receiverInfo: '',
         origin: '',
         destination: '',
+        customerEmail: '',
         estimatedDelivery: '',
         createdAt: new Date().toISOString().slice(0, 16) // Default to now
     });
@@ -95,6 +96,17 @@ export default function CreateShipmentModal({ onClose }: { onClose: () => void }
                                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-blue-500 outline-none"
                                 value={formData.destination}
                                 onChange={e => setFormData({ ...formData, destination: e.target.value })}
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-400">Customer Email (Optional)</label>
+                            <input
+                                type="email"
+                                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-blue-500 outline-none"
+                                value={formData.customerEmail}
+                                onChange={e => setFormData({ ...formData, customerEmail: e.target.value })}
+                                placeholder="customer@example.com - Receives tracking updates"
                             />
                         </div>
                     </div>

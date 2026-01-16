@@ -81,6 +81,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
         createdAt: new Date(shipment.createdAt).toISOString().slice(0, 16),
         origin: shipment.origin || '',
         destination: shipment.destination || '',
+        customerEmail: shipment.customerEmail || '',
         productDescription: shipment.productDescription || '',
         imageUrls: shipment.imageUrls || []
     });
@@ -95,6 +96,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                     createdAt: new Date(editData.createdAt).toISOString(),
                     origin: editData.origin,
                     destination: editData.destination,
+                    customerEmail: editData.customerEmail,
                     productDescription: editData.productDescription,
                     imageUrls: editData.imageUrls
                 })
@@ -254,6 +256,16 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                                 value={editData.destination}
                                                 onChange={e => setEditData({ ...editData, destination: e.target.value })}
                                                 placeholder="Destination location"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs text-slate-400 block mb-1">Customer Email</label>
+                                            <input
+                                                type="email"
+                                                className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white"
+                                                value={editData.customerEmail}
+                                                onChange={e => setEditData({ ...editData, customerEmail: e.target.value })}
+                                                placeholder="customer@example.com"
                                             />
                                         </div>
                                         <div>

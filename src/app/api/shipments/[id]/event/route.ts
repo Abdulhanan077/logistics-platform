@@ -2,6 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { sendShipmentEmail } from "@/lib/email";
+import { logAction } from "@/lib/logger";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -37,6 +39,18 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
                 data: { status }
             })
         ]);
+
+        await logAction(session.user.id, "UPDATE_STATUS", id, { status, location });
+
+        if (shipment.customerEmail) {
+            sendShipmentEmail({
+                to: shipment.customerEmail,
+                trackingNumber: shipment.trackingNumber,
+                status,
+                location: location || "In Transit",
+                description: description || "Status updated"
+            });
+        }
 
         return NextResponse.json(result);
     } catch (err) {

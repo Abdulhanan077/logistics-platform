@@ -42,6 +42,7 @@ model Shipment {
   status         String   @default("PENDING") // PENDING, IN_TRANSIT, DELIVERED, RETURNED
   origin         String?
   destination    String?
+  customerEmail  String?
   estimatedDelivery DateTime?
   
   productDescription String?

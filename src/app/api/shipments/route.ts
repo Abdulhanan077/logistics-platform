@@ -2,6 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { sendShipmentEmail } from "@/lib/email";
+import { logAction } from "@/lib/logger";
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
@@ -11,7 +13,7 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
-        const { senderInfo, receiverInfo, origin, destination, estimatedDelivery } = body;
+        const { senderInfo, receiverInfo, origin, destination, estimatedDelivery, customerEmail } = body;
 
         // Generate random tracking number (e.g., TRK-12345678)
         const trackingNumber = `TRK-${Math.floor(10000000 + Math.random() * 90000000)}`;
@@ -23,7 +25,7 @@ export async function POST(req: Request) {
                 receiverInfo,
                 origin,
                 destination,
-
+                customerEmail,
                 estimatedDelivery: estimatedDelivery ? new Date(estimatedDelivery) : null,
                 imageUrls: JSON.stringify(body.imageUrls || []), // SQLite fix
                 createdAt: body.createdAt ? new Date(body.createdAt) : undefined,
@@ -39,6 +41,21 @@ export async function POST(req: Request) {
                 }
             }
         });
+
+        // Log action
+        await logAction(session.user.id, "CREATE_SHIPMENT", shipment.id, { trackingNumber });
+
+        // Send Email
+        if (customerEmail) {
+            // Don't wait for email to finish to speed up response
+            sendShipmentEmail({
+                to: customerEmail,
+                trackingNumber,
+                status: "CREATED",
+                location: origin || "System",
+                description: "Your shipment has been created."
+            });
+        }
 
         return NextResponse.json(shipment);
     } catch (error) {
