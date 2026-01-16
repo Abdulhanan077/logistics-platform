@@ -4,7 +4,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { LayoutDashboard, Package, Users, Settings, LogOut } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
-export default function AdminSidebar({ role }: { role: string }) {
+export default function AdminSidebar({ role, onClose }: { role: string; onClose?: () => void }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const viewAs = searchParams.get('viewAs');
@@ -16,14 +16,19 @@ export default function AdminSidebar({ role }: { role: string }) {
     ];
 
     return (
-        <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
-            <div className="p-6 border-b border-slate-800">
+        <aside className="w-full h-full bg-slate-900 border-r border-slate-800 flex flex-col">
+            <div className="p-6 border-b border-slate-800 flex justify-between items-center">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                     Atlas Logistics
                 </h1>
+                {onClose && (
+                    <button onClick={onClose} className="md:hidden text-slate-400 hover:text-white">
+                        <LogOut className="w-5 h-5 rotate-180" />
+                    </button>
+                )}
             </div>
 
-            <nav className="flex-1 p-4 space-y-1">
+            <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
                 {links.map((link) => {
                     const Icon = link.icon;
                     const isActive = pathname === link.href;
@@ -36,6 +41,7 @@ export default function AdminSidebar({ role }: { role: string }) {
                         <Link
                             key={link.href}
                             href={href}
+                            onClick={onClose}
                             className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all ${isActive
                                 ? 'bg-blue-600/10 text-blue-400 border border-blue-600/20'
                                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
