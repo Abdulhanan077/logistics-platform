@@ -43,9 +43,18 @@ export async function PATCH(
             }
         });
 
-        // Optional: If this applies to the LATEST event, should we also update the shipment status/location?
-        // For simplicity, we just update the historical record. The user can manually add a new current status if needed,
-        // or edit the main shipment details if they want to change the "current" displayed status.
+        // Check if we need to sync the main shipment status
+        const latestEvent = await prisma.shipmentEvent.findFirst({
+            where: { shipmentId: id },
+            orderBy: { timestamp: 'desc' }
+        });
+
+        if (latestEvent) {
+            await prisma.shipment.update({
+                where: { id },
+                data: { status: latestEvent.status }
+            });
+        }
 
         return NextResponse.json(updatedEvent);
 
