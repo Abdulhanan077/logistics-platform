@@ -135,9 +135,9 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                                     Live Location
                                 </h3>
                                 <TrackingMapWrapper
-                                    lat={latestLocation.latitude}
-                                    lng={latestLocation.longitude}
-                                    locationName={latestLocation.location}
+                                    lat={latestLocation.latitude ?? 0}
+                                    lng={latestLocation.longitude ?? 0}
+                                    locationName={latestLocation.location || 'Current Location'}
                                 />
                             </div>
                         ) : (
