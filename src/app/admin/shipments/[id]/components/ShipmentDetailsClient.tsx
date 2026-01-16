@@ -22,7 +22,9 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
     const [editData, setEditData] = useState({
         createdAt: new Date(shipment.createdAt).toISOString().slice(0, 16),
         origin: shipment.origin || '',
-        destination: shipment.destination || ''
+        destination: shipment.destination || '',
+        productDescription: shipment.productDescription || '',
+        imageUrls: shipment.imageUrls || []
     });
 
     const handleEditSubmit = async (e: React.FormEvent) => {
@@ -34,7 +36,9 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                 body: JSON.stringify({
                     createdAt: new Date(editData.createdAt).toISOString(),
                     origin: editData.origin,
-                    destination: editData.destination
+                    destination: editData.destination,
+                    productDescription: editData.productDescription,
+                    imageUrls: editData.imageUrls
                 })
             });
             if (res.ok) {
@@ -185,8 +189,48 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                                 onChange={e => setEditData({ ...editData, createdAt: e.target.value })}
                                             />
                                         </div>
+                                        <div>
+                                            <label className="text-xs text-slate-400 block mb-1">Origin</label>
+                                            <input
+                                                type="text"
+                                                className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white"
+                                                value={editData.origin}
+                                                onChange={e => setEditData({ ...editData, origin: e.target.value })}
+                                                placeholder="Origin location"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs text-slate-400 block mb-1">Destination</label>
+                                            <input
+                                                type="text"
+                                                className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white"
+                                                value={editData.destination}
+                                                onChange={e => setEditData({ ...editData, destination: e.target.value })}
+                                                placeholder="Destination location"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs text-slate-400 block mb-1">Product Description</label>
+                                            <textarea
+                                                rows={3}
+                                                className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white resize-none"
+                                                value={editData.productDescription}
+                                                onChange={e => setEditData({ ...editData, productDescription: e.target.value })}
+                                                placeholder="Describe the shipment contents..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs text-slate-400 block mb-1">Image URLs (One per line)</label>
+                                            <textarea
+                                                rows={3}
+                                                className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white resize-none"
+                                                value={editData.imageUrls.join('\n')}
+                                                onChange={e => setEditData({ ...editData, imageUrls: e.target.value.split('\n').filter((url: string) => url.trim() !== '') })}
+                                                placeholder="https://example.com/image1.jpg"
+                                            />
+                                        </div>
                                         <div className="flex gap-2">
-                                            <button className="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-500">Save Changes</button>
+                                            <button type="submit" className="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-500">Save Changes</button>
                                         </div>
                                     </form>
                                 )}
@@ -209,6 +253,34 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                 <p className="text-slate-400 text-sm print:text-gray-600">{shipment.receiverInfo}</p>
                             </div>
                         </div>
+
+                        {/* Product Details */}
+                        {(shipment.productDescription || (shipment.imageUrls && shipment.imageUrls.length > 0)) && (
+                            <div className="mb-8 pb-8 border-b border-slate-800 print:border-gray-200">
+                                <h3 className="text-white font-semibold mb-4 print:text-black">Product Details</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {shipment.productDescription && (
+                                        <div>
+                                            <p className="text-slate-500 text-sm font-medium uppercase mb-2">Description</p>
+                                            <p className="text-slate-300 print:text-black whitespace-pre-wrap">{shipment.productDescription}</p>
+                                        </div>
+                                    )}
+                                    {shipment.imageUrls && shipment.imageUrls.length > 0 && (
+                                        <div>
+                                            <p className="text-slate-500 text-sm font-medium uppercase mb-2">Attached Images</p>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                {shipment.imageUrls.map((url: string, i: number) => (
+                                                    <a key={i} href={url} target="_blank" rel="noreferrer" className="block aspect-square bg-slate-800 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-colors relative group">
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                        <img src={url} alt={`Product ${i + 1}`} className="w-full h-full object-cover" />
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Timeline */}
                         <div>

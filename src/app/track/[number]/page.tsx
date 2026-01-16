@@ -127,6 +127,49 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                             </div>
                         </div>
 
+                        {/* Product Details Section */}
+                        {((shipment.productDescription) || (shipment.imageUrls && shipment.imageUrls.length > 0)) && (
+                            <div className="space-y-4">
+                                <h3 className="text-white text-lg font-bold flex items-center">
+                                    <Package className="w-5 h-5 mr-3 text-slate-500" />
+                                    Shipment Details
+                                </h3>
+                                <div className="bg-slate-800/30 rounded-2xl p-6 border border-slate-800">
+                                    {shipment.productDescription && (
+                                        <div className="mb-6">
+                                            <p className="text-sm text-slate-500 uppercase font-bold mb-2 tracking-wider">Description</p>
+                                            <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">{shipment.productDescription}</p>
+                                        </div>
+                                    )}
+
+                                    {shipment.imageUrls && shipment.imageUrls.length > 0 && (
+                                        <div>
+                                            <p className="text-sm text-slate-500 uppercase font-bold mb-3 tracking-wider">Attached Images</p>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                {shipment.imageUrls.map((url: string, index: number) => (
+                                                    <a
+                                                        key={index}
+                                                        href={url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="group relative aspect-square bg-slate-900 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500 transition-all shadow-lg"
+                                                    >
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                        <img
+                                                            src={url}
+                                                            alt={`Shipment item ${index + 1}`}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                        />
+                                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         {/* Route Map (Visual) */}
                         {latestLocation ? (
                             <div className="w-full mb-8">

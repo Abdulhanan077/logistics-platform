@@ -12,7 +12,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         const body = await req.json();
 
         // Allowed fields to update
-        const { createdAt, status, origin, destination, trackingNumber } = body;
+        const { createdAt, status, origin, destination, trackingNumber, productDescription, imageUrls } = body;
 
         // Verify ownership
         const existingShipment = await prisma.shipment.findUnique({ where: { id } });
@@ -26,6 +26,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         if (origin) updateData.origin = origin;
         if (destination) updateData.destination = destination;
         if (trackingNumber) updateData.trackingNumber = trackingNumber;
+        if (productDescription !== undefined) updateData.productDescription = productDescription;
+        if (imageUrls !== undefined) updateData.imageUrls = imageUrls;
 
         const updatedShipment = await prisma.shipment.update({
             where: { id },
