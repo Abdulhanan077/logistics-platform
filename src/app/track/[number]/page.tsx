@@ -75,23 +75,23 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
     const latestLocation = shipment.events.find((e: any) => e.latitude && e.longitude);
 
     return (
-        <div className="min-h-screen bg-slate-950 p-6 lg:p-12">
-            <div className="max-w-4xl mx-auto space-y-8">
+        <div className="min-h-screen bg-slate-950 p-4 lg:p-12">
+            <div className="max-w-4xl mx-auto space-y-6 lg:space-y-8">
                 <Link href="/" className="inline-flex items-center text-slate-400 hover:text-white transition-colors">
                     <ArrowLeft className="w-5 h-5 mr-2" />
                     Back to Search
                 </Link>
 
                 {/* Main Card */}
-                <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
                     {/* Header with Admin Branding */}
-                    <div className="bg-slate-950/50 p-8 border-b border-slate-800 flex flex-col md:flex-row justify-between md:items-center gap-6">
+                    <div className="bg-slate-950/50 p-5 lg:p-8 border-b border-slate-800 flex flex-col md:flex-row justify-between md:items-center gap-6">
                         <div>
                             <p className="text-slate-400 text-sm font-medium mb-1">Tracking Number</p>
-                            <h1 className="text-3xl md:text-4xl font-mono font-bold text-white tracking-tight">{shipment.trackingNumber}</h1>
+                            <h1 className="text-2xl lg:text-4xl font-mono font-bold text-white tracking-tight break-all">{shipment.trackingNumber}</h1>
                         </div>
-                        <div className="flex items-center bg-slate-800/50 px-5 py-3 rounded-xl border border-slate-700/50">
-                            <div className="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold mr-3">
+                        <div className="flex items-center bg-slate-800/50 px-4 py-2 lg:px-5 lg:py-3 rounded-xl border border-slate-700/50 w-full md:w-auto">
+                            <div className="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold mr-3 shrink-0">
                                 <Building2 className="w-5 h-5" />
                             </div>
                             <div>
@@ -101,7 +101,7 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                         </div>
                     </div>
 
-                    <div className="p-8 space-y-12">
+                    <div className="p-5 lg:p-8 space-y-8 lg:space-y-12">
                         {/* Status Bar */}
                         <div className="space-y-4">
                             <div className="flex justify-between items-end">
@@ -218,23 +218,26 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                                 <Clock className="w-5 h-5 mr-3 text-slate-500" />
                                 Activity Log
                             </h3>
-                            <div className="relative pl-4 space-y-8 before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+                            <div className="relative pl-4 space-y-6 lg:space-y-8 before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
                                 {shipment.events.map((event: any, index: number) => (
-                                    <div key={event.id} className="relative pl-10 group">
+                                    <div key={event.id} className="relative pl-6 lg:pl-10 group">
                                         <div className={`absolute left-2.5 w-4 h-4 -ml-2 rounded-full border-4 border-slate-900 ${getTimelineDotColor(event.status)
                                             }`}></div>
 
                                         <div className="bg-slate-800/20 border border-slate-800 p-4 rounded-xl hover:bg-slate-800/40 transition-colors">
-                                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-2">
-                                                <p className={`font-semibold ${getStatusColor(event.status)}`}>
-                                                    {event.status} <span className="text-slate-500 font-normal mx-2">•</span> {event.location || 'Unknown Location'}
-                                                </p>
-                                                <span className="text-xs text-slate-500 font-mono bg-slate-900 px-2 py-1 rounded-md border border-slate-800">
-                                                    {new Date(event.timestamp).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
-                                                </span>
+                                            <div className="flex flex-col gap-2 mb-2">
+                                                <div className="flex flex-wrap justify-between items-start gap-2">
+                                                    <p className={`font-semibold text-sm lg:text-base ${getStatusColor(event.status)}`}>
+                                                        {event.status.replace(/_/g, ' ')}
+                                                    </p>
+                                                    <span className="text-xs text-slate-500 font-mono bg-slate-900 px-2 py-1 rounded-md border border-slate-800 whitespace-nowrap">
+                                                        {new Date(event.timestamp).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                                                    </span>
+                                                </div>
+                                                <p className="text-slate-300 font-medium text-sm lg:text-base">{event.location || 'Unknown Location'}</p>
                                             </div>
                                             {event.description && (
-                                                <p className="text-slate-400 text-sm leading-relaxed">{event.description}</p>
+                                                <p className="text-slate-400 text-xs lg:text-sm leading-relaxed border-t border-slate-800/50 pt-2 mt-2">{event.description}</p>
                                             )}
                                         </div>
                                     </div>
