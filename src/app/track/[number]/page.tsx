@@ -2,6 +2,12 @@ import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { MapPin, Package, CheckCircle2, Clock, Truck, ArrowLeft, Building2 } from "lucide-react"
+import dynamic from 'next/dynamic';
+
+const TrackingMap = dynamic(() => import('@/components/TrackingMap'), {
+    loading: () => <div className="h-[400px] w-full bg-slate-800 animate-pulse rounded-xl" />,
+    ssr: false
+});
 
 async function getShipment(trackingNumber: string) {
     return await prisma.shipment.findUnique({
@@ -71,6 +77,7 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
     }
 
     const progress = getStatusProgress(shipment.status);
+    const latestLocation = shipment.events.find((e: any) => e.latitude && e.longitude);
 
     return (
         <div className="min-h-screen bg-slate-950 p-6 lg:p-12">
@@ -124,21 +131,6 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                                 <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,.1)_25%,transparent_25%,transparent_50%,rgba(255,255,255,.1)_50%,rgba(255,255,255,.1)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem] animate-[progress-bar-stripes_1s_linear_infinite] opacity-30 w-[progress]%" style={{ width: `${progress}%` }}></div>
                             </div>
                         </div>
-
-                        import dynamic from 'next/dynamic';
-
-const TrackingMap = dynamic(() => import('@/components/TrackingMap'), {
-                            loading: () => <div className="h-[400px] w-full bg-slate-800 animate-pulse rounded-xl" />,
-                        ssr: false
-});
-
-// ... inside component ...
-
-    // Find latest event with coordinates
-    const latestLocation = shipment.events.find((e: any) => e.latitude && e.longitude);
-
-                        return (
-                        // ... previous JSX ...
 
                         {/* Route Map (Visual) */}
                         {latestLocation ? (
