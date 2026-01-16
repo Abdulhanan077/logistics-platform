@@ -21,7 +21,7 @@ export default async function ShipmentDetailsPage({ params }: { params: Promise<
     if (!shipment) notFound();
 
     // Enforce isolation
-    if (shipment.adminId !== session.user.id) {
+    if (shipment.adminId !== session.user.id && session.user.role !== 'SUPER_ADMIN') {
         return (
             <div className="p-8 text-center text-red-500">
                 Unauthorized: You do not have permission to view this shipment.
