@@ -443,6 +443,28 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                                         onChange={e => setEditEventData({ ...editEventData, location: e.target.value })}
                                                     />
                                                 </div>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <div>
+                                                        <label className="text-xs text-slate-400 block mb-1">Latitude</label>
+                                                        <input
+                                                            type="number"
+                                                            step="any"
+                                                            className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white"
+                                                            value={editEventData.latitude}
+                                                            onChange={e => setEditEventData({ ...editEventData, latitude: e.target.value })}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-xs text-slate-400 block mb-1">Longitude</label>
+                                                        <input
+                                                            type="number"
+                                                            step="any"
+                                                            className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white"
+                                                            value={editEventData.longitude}
+                                                            onChange={e => setEditEventData({ ...editEventData, longitude: e.target.value })}
+                                                        />
+                                                    </div>
+                                                </div>
                                                 <div>
                                                     <label className="text-xs text-slate-400 block mb-1">Description</label>
                                                     <textarea
