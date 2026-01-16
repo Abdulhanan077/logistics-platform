@@ -1,6 +1,5 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM_EMAIL = 'onboarding@resend.dev'; // Default Resend testing email
 
@@ -17,6 +16,8 @@ export async function sendShipmentEmail({ to, trackingNumber, status, location, 
         console.warn('RESEND_API_KEY is not set. Skipping email.');
         return;
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     try {
         const trackingUrl = `${process.env.NEXTAUTH_URL}/track/${trackingNumber}`;
