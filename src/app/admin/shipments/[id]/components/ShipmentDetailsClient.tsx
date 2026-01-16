@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Printer, MapPin, Loader2, CheckCircle2, Clock, Pencil, X, Check, FileText } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -24,8 +24,12 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
         description: '',
         latitude: '',
         longitude: '',
-        timestamp: new Date().toISOString().slice(0, 16) // Default to now, format YYYY-MM-DDTHH:mm
+        timestamp: ''
     });
+
+    useEffect(() => {
+        setFormData(prev => ({ ...prev, timestamp: new Date().toISOString().slice(0, 16) }));
+    }, []);
 
 
     // Event Edit State
@@ -218,7 +222,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                             <div>
                                 <h1 className="text-3xl font-bold text-white print:text-black">{shipment.trackingNumber}</h1>
                                 <div className="flex items-center gap-2 mt-1">
-                                    <p className="text-slate-400 print:text-gray-600">Created on {new Date(shipment.createdAt).toLocaleDateString()}</p>
+                                    <p className="text-slate-400 print:text-gray-600" suppressHydrationWarning>Created on {new Date(shipment.createdAt).toLocaleDateString()}</p>
                                     <button
                                         onClick={() => setIsEditing(!isEditing)}
                                         className="text-xs text-blue-400 hover:text-blue-300 print:hidden"
@@ -514,7 +518,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                                     </button>
                                                 </div>
                                                 <p className="text-slate-400 text-sm print:text-gray-500">{event.description}</p>
-                                                <p className="text-slate-500 text-xs print:text-gray-400">{new Date(event.timestamp).toLocaleString()}</p>
+                                                <p className="text-slate-500 text-xs print:text-gray-400" suppressHydrationWarning>{new Date(event.timestamp).toLocaleString()}</p>
                                             </div>
                                         )}
                                     </div>
