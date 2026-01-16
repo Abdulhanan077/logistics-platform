@@ -29,5 +29,11 @@ export default async function ShipmentDetailsPage({ params }: { params: Promise<
         );
     }
 
-    return <ShipmentDetailsClient shipment={shipment} />
+    // Parse imageUrls for client
+    const parsedShipment = {
+        ...shipment,
+        imageUrls: shipment.imageUrls ? JSON.parse(shipment.imageUrls) : []
+    };
+
+    return <ShipmentDetailsClient shipment={parsedShipment} />
 }

@@ -5,7 +5,7 @@ import { MapPin, Package, Clock, ArrowLeft, Building2 } from "lucide-react"
 import TrackingMapWrapper from '@/components/TrackingMapWrapper';
 
 async function getShipment(trackingNumber: string) {
-    return await prisma.shipment.findUnique({
+    const shipment = await prisma.shipment.findUnique({
         where: { trackingNumber },
         include: {
             admin: {
@@ -16,6 +16,13 @@ async function getShipment(trackingNumber: string) {
             }
         }
     });
+
+    if (!shipment) return null;
+
+    return {
+        ...shipment,
+        imageUrls: shipment.imageUrls ? JSON.parse(shipment.imageUrls) : []
+    };
 }
 
 function getStatusProgress(status: string) {

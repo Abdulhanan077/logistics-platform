@@ -3,6 +3,8 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+import { logAction } from "@/lib/logger";
+
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const session = await getServerSession(authOptions);
@@ -27,14 +29,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         if (destination) updateData.destination = destination;
         if (trackingNumber) updateData.trackingNumber = trackingNumber;
         if (productDescription !== undefined) updateData.productDescription = productDescription;
-        if (imageUrls !== undefined) updateData.imageUrls = imageUrls;
+        if (imageUrls !== undefined) updateData.imageUrls = JSON.stringify(imageUrls); // SQLite fix
 
         const updatedShipment = await prisma.shipment.update({
             where: { id },
             data: updateData
         });
 
-        return NextResponse.json(updatedShipment);
+        await logAction(session.user.id, "UPDATE_SHIPMENT", id, updateData);
+
+        const parsedShipment = {
+            ...updatedShipment,
+            imageUrls: updatedShipment.imageUrls ? JSON.parse(updatedShipment.imageUrls) : []
+        };
+
+        return NextResponse.json(parsedShipment);
     } catch (err) {
         console.error("Error updating shipment:", err);
         return new NextResponse("Internal Error", { status: 500 });
@@ -56,6 +65,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
         await prisma.shipment.delete({
             where: { id }
         });
+
+        await logAction(session.user.id, "DELETE_SHIPMENT", id, { trackingNumber: existingShipment.trackingNumber });
 
         return new NextResponse(null, { status: 204 });
     } catch (err) {

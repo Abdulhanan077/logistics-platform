@@ -23,7 +23,9 @@ export async function POST(req: Request) {
                 receiverInfo,
                 origin,
                 destination,
+                destination,
                 estimatedDelivery: estimatedDelivery ? new Date(estimatedDelivery) : null,
+                imageUrls: JSON.stringify(body.imageUrls || []), // SQLite fix
                 createdAt: body.createdAt ? new Date(body.createdAt) : undefined,
                 status: "PENDING",
                 adminId: session.user.id,
@@ -61,7 +63,12 @@ export async function GET(req: Request) {
             }
         });
 
-        return NextResponse.json(shipments);
+        const parsedShipments = shipments.map(s => ({
+            ...s,
+            imageUrls: s.imageUrls ? JSON.parse(s.imageUrls) : []
+        }));
+
+        return NextResponse.json(parsedShipments);
     } catch (error) {
         console.error("[SHIPMENTS_GET]", error);
         return new NextResponse("Internal Error", { status: 500 });
