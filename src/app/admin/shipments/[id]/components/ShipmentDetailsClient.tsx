@@ -4,8 +4,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Printer, MapPin, Loader2, CheckCircle2, Clock, Pencil, X, Check, FileText } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import dynamic from 'next/dynamic';
 import ShippingLabelPDF from '@/components/pdf/ShippingLabelPDF';
+
+const PDFDownloadLink = dynamic(
+    () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
+    {
+        ssr: false,
+        loading: () => <button className="flex items-center px-4 py-2 bg-blue-600/50 text-white rounded-xl">Loading...</button>,
+    }
+);
 
 export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
     const router = useRouter();
