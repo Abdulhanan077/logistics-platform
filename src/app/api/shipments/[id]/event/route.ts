@@ -10,7 +10,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     try {
         const body = await req.json();
-        const { status, location, description, timestamp } = body;
+        const { status, location, description, timestamp, latitude, longitude } = body;
 
         // Verify ownership first
         const shipment = await prisma.shipment.findUnique({ where: { id } });
@@ -27,6 +27,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
                     status,
                     location,
                     description,
+                    latitude: latitude ? parseFloat(latitude) : null,
+                    longitude: longitude ? parseFloat(longitude) : null,
                     timestamp: timestamp ? new Date(timestamp) : undefined // Use provided timestamp or default to now()
                 }
             }),

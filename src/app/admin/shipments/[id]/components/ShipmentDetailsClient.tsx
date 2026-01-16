@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Printer, MapPin, Loader2, CheckCircle2, Clock } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
     const router = useRouter();
@@ -11,6 +12,8 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
         status: 'IN_TRANSIT',
         location: '',
         description: '',
+        latitude: '',
+        longitude: '',
         timestamp: new Date().toISOString().slice(0, 16) // Default to now, format YYYY-MM-DDTHH:mm
     });
 
@@ -37,12 +40,13 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
             if (res.ok) {
                 setIsEditing(false);
                 router.refresh();
+                toast.success("Shipment details updated");
             } else {
-                alert('Failed to update shipment details');
+                toast.error('Failed to update shipment details');
             }
         } catch (e) {
             console.error(e);
-            alert('Error updating');
+            toast.error('Error updating');
         }
     };
 
@@ -87,15 +91,18 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                     status: 'IN_TRANSIT',
                     location: '',
                     description: '',
+                    latitude: '',
+                    longitude: '',
                     timestamp: new Date().toISOString().slice(0, 16)
                 });
                 router.refresh();
+                toast.success('Status updated successfully');
             } else {
-                alert('Failed to update');
+                toast.error('Failed to update');
             }
         } catch (e) {
             console.error(e);
-            alert('Error updating');
+            toast.error('Error updating');
         } finally {
             setUpdating(false);
         }
@@ -112,12 +119,13 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
             if (res.ok) {
                 router.push('/admin/dashboard');
                 router.refresh();
+                toast.success("Shipment deleted");
             } else {
-                alert('Failed to delete shipment');
+                toast.error('Failed to delete shipment');
             }
         } catch (e) {
             console.error(e);
-            alert('Error deleting shipment');
+            toast.error('Error deleting shipment');
         }
     };
 
@@ -138,6 +146,12 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                     >
                         <Printer className="w-5 h-5 mr-2" />
                         Print Details
+                    </button>
+                    <button
+                        onClick={handleDelete}
+                        className="flex items-center px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-all border border-red-500/20"
+                    >
+                        Delete
                     </button>
                 </div>
             </div>
@@ -259,6 +273,31 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                         className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-white outline-none focus:ring-1 focus:ring-blue-500"
                                         value={formData.location}
                                         onChange={e => setFormData({ ...formData, location: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="space-y-2">
+                                    <label className="text-sm text-slate-400">Latitude</label>
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        placeholder="e.g. 40.7128"
+                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:ring-1 focus:ring-blue-500"
+                                        value={formData.latitude}
+                                        onChange={e => setFormData({ ...formData, latitude: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm text-slate-400">Longitude</label>
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        placeholder="e.g. -74.0060"
+                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:ring-1 focus:ring-blue-500"
+                                        value={formData.longitude}
+                                        onChange={e => setFormData({ ...formData, longitude: e.target.value })}
                                     />
                                 </div>
                             </div>

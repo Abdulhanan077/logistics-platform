@@ -40,12 +40,14 @@ model Shipment {
 }
 
 model ShipmentEvent {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   shipmentId  String
   shipment    Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
   
   status      String
-  location    String?
+  location    String
+  latitude    Float?   // GPS Latitude
+  longitude   Float?   // GPS Longitude
   description String?
   timestamp   DateTime @default(now())
   createdAt   DateTime @default(now())

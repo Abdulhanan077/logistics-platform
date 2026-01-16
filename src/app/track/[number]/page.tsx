@@ -125,33 +125,62 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                             </div>
                         </div>
 
+                        import dynamic from 'next/dynamic';
+
+const TrackingMap = dynamic(() => import('@/components/TrackingMap'), {
+                            loading: () => <div className="h-[400px] w-full bg-slate-800 animate-pulse rounded-xl" />,
+                        ssr: false
+});
+
+// ... inside component ...
+
+    // Find latest event with coordinates
+    const latestLocation = shipment.events.find((e: any) => e.latitude && e.longitude);
+
+                        return (
+                        // ... previous JSX ...
+
                         {/* Route Map (Visual) */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="bg-slate-800/30 p-6 rounded-2xl border border-slate-800">
-                                <div className="flex items-start mb-4">
-                                    <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center mr-3 mt-1">
-                                        <Package className="w-4 h-4" />
+                        {latestLocation ? (
+                            <div className="w-full mb-8">
+                                <h3 className="text-white text-lg font-bold mb-4 flex items-center">
+                                    <MapPin className="w-5 h-5 mr-3 text-slate-500" />
+                                    Live Location
+                                </h3>
+                                <TrackingMap
+                                    lat={latestLocation.latitude}
+                                    lng={latestLocation.longitude}
+                                    locationName={latestLocation.location}
+                                />
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="bg-slate-800/30 p-6 rounded-2xl border border-slate-800">
+                                    <div className="flex items-start mb-4">
+                                        <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center mr-3 mt-1">
+                                            <Package className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-slate-500 text-xs uppercase mb-1">Origin</p>
+                                            <p className="text-white text-lg font-semibold">{shipment.origin}</p>
+                                            <p className="text-slate-400 text-sm mt-1">{shipment.senderInfo}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p className="text-slate-500 text-xs uppercase mb-1">Origin</p>
-                                        <p className="text-white text-lg font-semibold">{shipment.origin}</p>
-                                        <p className="text-slate-400 text-sm mt-1">{shipment.senderInfo}</p>
+                                </div>
+                                <div className="bg-slate-800/30 p-6 rounded-2xl border border-slate-800">
+                                    <div className="flex items-start mb-4">
+                                        <div className="w-8 h-8 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center mr-3 mt-1">
+                                            <MapPin className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-slate-500 text-xs uppercase mb-1">Destination</p>
+                                            <p className="text-white text-lg font-semibold">{shipment.destination}</p>
+                                            <p className="text-slate-400 text-sm mt-1">{shipment.receiverInfo}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="bg-slate-800/30 p-6 rounded-2xl border border-slate-800">
-                                <div className="flex items-start mb-4">
-                                    <div className="w-8 h-8 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center mr-3 mt-1">
-                                        <MapPin className="w-4 h-4" />
-                                    </div>
-                                    <div>
-                                        <p className="text-slate-500 text-xs uppercase mb-1">Destination</p>
-                                        <p className="text-white text-lg font-semibold">{shipment.destination}</p>
-                                        <p className="text-slate-400 text-sm mt-1">{shipment.receiverInfo}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        )}
 
                         {/* Detailed History */}
                         <div>
