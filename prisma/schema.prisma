@@ -63,6 +63,7 @@ model Message {
   id         String   @id @default(cuid())
   content    String
   sender     String   // "CLIENT" or "ADMIN"
+  isRead     Boolean  @default(false)
   createdAt  DateTime @default(now())
   
   shipmentId String

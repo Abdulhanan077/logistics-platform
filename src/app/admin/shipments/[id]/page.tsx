@@ -32,7 +32,8 @@ export default async function ShipmentDetailsPage({ params }: { params: Promise<
     // Parse imageUrls for client
     let parsedImageUrls = [];
     try {
-        parsedImageUrls = shipment.imageUrls ? JSON.parse(shipment.imageUrls) : [];
+        const rawUrl = (shipment as any).imageUrls;
+        parsedImageUrls = rawUrl ? JSON.parse(rawUrl) : [];
         if (!Array.isArray(parsedImageUrls)) parsedImageUrls = [];
     } catch (e) {
         console.error("Failed to parse imageUrls", e);

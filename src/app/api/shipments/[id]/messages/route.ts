@@ -11,7 +11,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     // However, the ID (UUID) is hard to guess.
 
     try {
-        const messages = await prisma.message.findMany({
+        const messages = await (prisma as any).message.findMany({
             where: { shipmentId: id },
             orderBy: { createdAt: 'asc' }
         });
@@ -41,7 +41,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             // If the request specifically says "ADMIN" and they are authorized, allow it.
         }
 
-        const message = await prisma.message.create({
+        const message = await (prisma as any).message.create({
             data: {
                 content,
                 sender: actualSender,

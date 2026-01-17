@@ -34,11 +34,27 @@ export default function ShipmentChat({ shipmentId }: { shipmentId: string }) {
             if (res.ok) {
                 const data = await res.json();
                 setMessages(data);
+
+                // Mark as read if latest message is from client
+                // We do this optimistically or just call the API
+                const hasUnread = data.some((m: Message) => m.sender === 'CLIENT'); // simplistic check, ideally check isRead but we assume if we are fetching, we are reading. 
+                // Actually, just calling mark-read endpoint is safer if we want to clear the dashboard notification.
+                if (data.length > 0) {
+                    markAsRead();
+                }
             }
         } catch (e) {
             console.error(e);
         }
     };
+
+    const markAsRead = async () => {
+        try {
+            await fetch(`/api/shipments/${shipmentId}/messages/read`, { method: 'POST' });
+        } catch (e) {
+            console.error('Failed to mark read', e);
+        }
+    }
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
