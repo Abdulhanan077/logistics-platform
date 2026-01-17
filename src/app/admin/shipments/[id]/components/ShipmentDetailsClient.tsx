@@ -214,9 +214,16 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column: Details & Visual */}
-                <div className="lg:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+                {/* Left Column: Chat - Sticky */}
+                <div className="xl:col-span-3 order-3 xl:order-1">
+                    <div className="sticky top-6">
+                        <ShipmentChat shipmentId={shipment.id} />
+                    </div>
+                </div>
+
+                {/* Middle Column: Details & Visual */}
+                <div className="xl:col-span-6 space-y-6 order-1 xl:order-2">
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl print:shadow-none print:border-black print:bg-white print:text-black">
                         {/* Header */}
                         <div className="flex justify-between items-start mb-8">
@@ -529,14 +536,11 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                     </div>
                 </div>
 
-                {/* Right Column: Update Form (Hidden on Print) */}
-                {/* Right Column: Update Form (Hidden on Print) */}
-                {/* Right Column: Update Form + Chat */}
-                <div className="print:hidden h-[calc(100vh-2rem)] sticky top-6 overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                {/* Right Column: Update Form */}
+                <div className="xl:col-span-3 order-2 xl:order-3">
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl sticky top-6">
                         <h3 className="text-lg font-bold text-white mb-4">Update Status</h3>
                         <form onSubmit={handleUpdate} className="space-y-4">
-                            {/* ... existing form fields ... */}
                             <div className="space-y-2">
                                 <label className="text-sm text-slate-400">New Status</label>
                                 <select
@@ -623,9 +627,6 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                             </button>
                         </form>
                     </div>
-
-                    {/* Chat Section */}
-                    <ShipmentChat shipmentId={shipment.id} />
                 </div>
             </div>
         </div>
