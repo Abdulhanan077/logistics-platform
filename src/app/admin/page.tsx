@@ -31,7 +31,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     ];
 
     // Recent Inquiries (Unread)
-    const unreadShipments = await prisma.shipment.findMany({
+    const unreadShipments: any[] = await prisma.shipment.findMany({
         where: {
             messages: {
                 some: {
