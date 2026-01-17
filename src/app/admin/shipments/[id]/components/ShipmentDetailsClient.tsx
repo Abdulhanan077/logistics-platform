@@ -181,7 +181,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
 
 
     return (
-        <div className="space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6 max-w-[1600px] mx-auto p-6">
             <div className="flex items-center justify-between print:hidden">
                 <button
                     onClick={() => router.back()}
