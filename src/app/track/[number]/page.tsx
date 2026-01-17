@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma"
 import Link from "next/link"
 import { MapPin, Package, Clock, ArrowLeft, Building2 } from "lucide-react"
 import TrackingMapWrapper from '@/components/TrackingMapWrapper';
+import TrackingChat from "@/components/TrackingChat";
 
 async function getShipment(trackingNumber: string) {
     const shipment = await prisma.shipment.findUnique({
@@ -267,6 +268,8 @@ export default async function TrackingResultPage({ params }: { params: Promise<{
                     &copy; 2026 Atlas Logistics. All rights reserved.
                 </div>
             </div>
+
+            <TrackingChat shipmentId={shipment.id} />
         </div>
     );
 }

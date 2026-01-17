@@ -55,6 +55,18 @@ model Shipment {
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  messages       Message[]
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  content    String
+  sender     String   // "CLIENT" or "ADMIN"
+  createdAt  DateTime @default(now())
+  
+  shipmentId String
+  shipment   Shipment @relation(fields: [shipmentId], references: [id])
 }
 
 model ShipmentEvent {

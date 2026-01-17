@@ -6,6 +6,7 @@ import { ArrowLeft, Printer, MapPin, Loader2, CheckCircle2, Clock, Pencil, X, Ch
 import { toast } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
 import ShippingLabelPDF from '@/components/pdf/ShippingLabelPDF';
+import ShipmentChat from './ShipmentChat';
 
 const PDFDownloadLink = dynamic(
     () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
@@ -529,10 +530,12 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                 </div>
 
                 {/* Right Column: Update Form (Hidden on Print) */}
+                {/* Right Column: Update Form (Hidden on Print) */}
                 <div className="print:hidden space-y-6">
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl sticky top-6">
                         <h3 className="text-lg font-bold text-white mb-4">Update Status</h3>
                         <form onSubmit={handleUpdate} className="space-y-4">
+                            {/* ... existing form fields ... */}
                             <div className="space-y-2">
                                 <label className="text-sm text-slate-400">New Status</label>
                                 <select
@@ -619,6 +622,9 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                             </button>
                         </form>
                     </div>
+
+                    {/* Chat Section */}
+                    <ShipmentChat shipmentId={shipment.id} />
                 </div>
             </div>
         </div>
