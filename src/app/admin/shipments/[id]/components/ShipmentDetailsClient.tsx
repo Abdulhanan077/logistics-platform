@@ -382,7 +382,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                     </form>
                                 )}
                             </div>
-                            <div className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${getStatusStyles(shipment.status)} print:border-black print:bg-transparent print:text-black`}>
+                            <div className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${getStatusStyles(shipment.status)}`}>
                                 {shipment.status}
                             </div>
                         </div>
@@ -435,7 +435,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                             <div className="relative pl-4 border-l-2 border-slate-800 space-y-8 print:border-gray-300">
                                 {shipment.events.map((event: any, index: number) => (
                                     <div key={event.id} className="relative pl-6 group">
-                                        <div className={`absolute -left-[21px] top-1 w-4 h-4 rounded-full border-2 ${getTimelineDotColor(event.status)} print:border-black print:bg-black`}></div>
+                                        <div className={`absolute -left-[21px] top-1 w-4 h-4 rounded-full border-2 ${getTimelineDotColor(event.status)}`}></div>
 
                                         {editingEventId === event.id ? (
                                             <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700 space-y-3">
@@ -523,7 +523,7 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                         ) : (
                                             <div className="space-y-1 relative">
                                                 <div className="flex justify-between items-start">
-                                                    <p className={`font-medium ${getStatusStyles(event.status).replace('bg-', 'data-').split(' ')[1]} print:text-black`}>
+                                                    <p className={`font-medium ${getStatusStyles(event.status).replace('bg-', 'data-').split(' ')[1]}`}>
                                                         {event.status} - {event.location || 'No Location'}
                                                     </p>
                                                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity print:hidden">
