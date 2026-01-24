@@ -22,6 +22,7 @@ export default function AdminLayoutClient({ children, user }: { children: React.
             <div className={`
                 fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0
                 ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}
+                print:hidden
             `}>
                 <AdminSidebar role={user.role} onClose={() => setIsSidebarOpen(false)} />
             </div>
