@@ -89,7 +89,8 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
         destination: shipment.destination || '',
         customerEmail: shipment.customerEmail || '',
         productDescription: shipment.productDescription || '',
-        imageUrls: shipment.imageUrls || []
+        imageUrls: shipment.imageUrls || [],
+        estimatedDelivery: shipment.estimatedDelivery ? new Date(shipment.estimatedDelivery).toISOString().slice(0, 16) : ''
     });
 
     const handleEditSubmit = async (e: React.FormEvent) => {
@@ -104,7 +105,8 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                     destination: editData.destination,
                     customerEmail: editData.customerEmail,
                     productDescription: editData.productDescription,
-                    imageUrls: editData.imageUrls
+                    imageUrls: editData.imageUrls,
+                    estimatedDelivery: editData.estimatedDelivery ? new Date(editData.estimatedDelivery + ':00Z').toISOString() : null
                 })
             });
             if (res.ok) {
@@ -237,8 +239,13 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                         <div className="flex justify-between items-start mb-8">
                             <div>
                                 <h1 className="text-3xl font-bold text-white print:text-black">{shipment.trackingNumber}</h1>
-                                <div className="flex items-center gap-2 mt-1">
+                                <div className="flex flex-col gap-1 mt-1">
                                     <p className="text-slate-400 print:text-gray-600">Created on <FormattedDate date={shipment.createdAt} mode="date" /></p>
+                                    {shipment.estimatedDelivery && (
+                                        <p className="text-blue-400 print:text-blue-600 font-medium">
+                                            Est. Delivery: <FormattedDate date={shipment.estimatedDelivery} mode="date" />
+                                        </p>
+                                    )}
                                     <button
                                         onClick={() => setIsEditing(!isEditing)}
                                         className="text-xs text-blue-400 hover:text-blue-300 print:hidden"
@@ -256,6 +263,15 @@ export default function ShipmentDetailsClient({ shipment }: { shipment: any }) {
                                                 className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white"
                                                 value={editData.createdAt}
                                                 onChange={e => setEditData({ ...editData, createdAt: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs text-slate-400 block mb-1">Estimated Delivery</label>
+                                            <input
+                                                type="datetime-local"
+                                                className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white"
+                                                value={editData.estimatedDelivery}
+                                                onChange={e => setEditData({ ...editData, estimatedDelivery: e.target.value })}
                                             />
                                         </div>
                                         <div>

@@ -30,6 +30,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         if (trackingNumber) updateData.trackingNumber = trackingNumber;
         if (productDescription !== undefined) updateData.productDescription = productDescription;
         if (imageUrls !== undefined) updateData.imageUrls = JSON.stringify(imageUrls); // SQLite fix
+        if (body.estimatedDelivery) updateData.estimatedDelivery = new Date(body.estimatedDelivery);
 
         const updatedShipment = await prisma.shipment.update({
             where: { id },
